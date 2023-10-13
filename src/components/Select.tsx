@@ -79,11 +79,15 @@ export const Select = (props: SelectProps) => {
             setIsOpen(true);
             break;
           }
-          const newValue =
+          let newValue =
             highlightedIndex + (event.code === 'ArrowDown' ? 1 : -1);
-          if (newValue >= 0 && newValue < options.length) {
-            setHighlightedIndex(newValue);
+          if (newValue < 0) {
+            newValue = options.length - 1;
           }
+          if (newValue > options.length - 1) {
+            newValue = 0;
+          }
+          setHighlightedIndex(newValue);
           break;
         }
         case 'Escape':
