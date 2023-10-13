@@ -20,8 +20,9 @@
     "@emotion/styled": "^11.11.0",
     "clsx": "^2.0.0",
     "framer-motion": "^10.13.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-input-autosize": "^3.0.0",
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
@@ -32,6 +33,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "@types/react-input-autosize": "^2.2.2",
     "@types/testing-library__jest-dom": "^5.14.5",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
