@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import AutosizeInput from 'react-input-autosize';
 
-import { type SelectOption, Select } from './components/Select';
+import { type SelectOption,Select } from './components/Select';
 
 const options: SelectOption[] = [
   {
@@ -31,16 +30,9 @@ function App() {
     options[0]
   );
   const [value2, setValue2] = useState<typeof options>([options[0]]);
-  const [input, setInput] = useState('');
   return (
     <>
       <div className={'prose max-w-none'}>
-        <AutosizeInput
-          value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-          }}
-        />
         <br />
         <div className="mt-16 container mx-auto">
           <Select
