@@ -93,7 +93,7 @@ export const Select = (props: SelectProps) => {
         return;
       }
       switch (event.code) {
-        case 'Space':
+        // case 'Space':
         case 'Enter':
           setIsOpen((prev) => !prev);
           if (isOpen) selectOption(filteredOptions[highlightedIndex]);
@@ -182,6 +182,7 @@ export const Select = (props: SelectProps) => {
           ) : (
             <>
               <AutoSize
+                className={styles['input-container']}
                 value={filterValue}
                 onFocus={() => {
                   setIsOpen(true);
@@ -200,17 +201,14 @@ export const Select = (props: SelectProps) => {
                   border: 'none',
                   outline: 'none',
                 }}
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                }}
                 onChange={(e) => {
                   setIsOpen(true);
                   setFilterValue(e.target.value);
                 }}
               />
-              {(!filterValue && value?.label) || <>&nbsp;</>}
+              {!filterValue ? (
+                <div className={styles['single-value']}>{value?.label}</div>
+              ) : null}
             </>
           )}
         </div>
