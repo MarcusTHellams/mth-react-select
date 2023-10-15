@@ -162,7 +162,7 @@ export const Select = (props: SelectProps) => {
         }}
         className={styles.container}
       >
-        <span className={styles.value}>
+        <div className={styles['value-container']}>
           {multiple ? (
             value.map((val) => {
               return (
@@ -201,7 +201,7 @@ export const Select = (props: SelectProps) => {
                   outline: 'none',
                 }}
                 style={{
-                  position: 'relative',
+                  position: 'absolute',
                   top: '50%',
                   transform: 'translateY(-50%)',
                 }}
@@ -210,10 +210,10 @@ export const Select = (props: SelectProps) => {
                   setFilterValue(e.target.value);
                 }}
               />
-              {!filterValue && value?.label}
+              {(!filterValue && value?.label) || <>&nbsp;</>}
             </>
           )}
-        </span>
+        </div>
         <button
           onClick={(e) => {
             e.stopPropagation();
