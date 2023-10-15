@@ -45,14 +45,14 @@ function App() {
           <br />
           <br />
           <a href="#">For testing</a>
-          {/* <Select
+          <Select
             multiple
             options={options}
             value={value2}
             onChange={(option) => {
               setValue2(option);
             }}
-          /> */}
+          />
         </div>
       </div>
     </>

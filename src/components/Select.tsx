@@ -162,23 +162,48 @@ export const Select = (props: SelectProps) => {
         }}
         className={styles.container}
       >
-        <div className={styles['value-container']}>
+        <div
+          className={clsx(
+            styles['value-container'],
+            multiple && styles['value-container--multi']
+          )}
+        >
           {multiple ? (
-            value.map((val) => {
-              return (
-                <button
-                  className={styles['option-badge']}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    selectOption(val);
-                  }}
-                  key={val.value}
-                >
-                  {val.label}{' '}
-                  <span className={styles['remove-btn']}>&times;</span>
-                </button>
-              );
-            })
+            <>
+              {value.map((val) => {
+                return (
+                  <button
+                    className={styles['option-badge']}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      selectOption(val);
+                    }}
+                    key={val.value}
+                  >
+                    {val.label}{' '}
+                    <span className={styles['remove-btn']}>&times;</span>
+                  </button>
+                );
+              })}
+              <AutoSize
+                className={styles['input-container']}
+                value={filterValue}
+                onFocus={() => {
+                  setIsOpen(true);
+                }}
+                onBlur={() => {
+                  setFilterValue('');
+                }}
+                inputRef={(input) => {
+                  inputRef.current = input;
+                }}
+                inputClassName={styles.input}
+                onChange={(e) => {
+                  setIsOpen(true);
+                  setFilterValue(e.target.value);
+                }}
+              />
+            </>
           ) : (
             <>
               <AutoSize
@@ -193,14 +218,7 @@ export const Select = (props: SelectProps) => {
                 inputRef={(input) => {
                   inputRef.current = input;
                 }}
-                inputStyle={{
-                  padding: 0,
-                  fontSize: 'inherit',
-                  fontFamily: 'inherit',
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                }}
+                inputClassName={styles.input}
                 onChange={(e) => {
                   setIsOpen(true);
                   setFilterValue(e.target.value);

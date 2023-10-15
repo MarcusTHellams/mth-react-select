@@ -33,6 +33,11 @@
   box-sizing: border-box;
 }
 
+.value-container--multi {
+  display: flex;
+  gap: 0.5em;
+}
+
 .single-value {
   grid-area: 1 / 1 / 2 / 3;
   max-width: 100%;
@@ -140,4 +145,13 @@
 }
 .option-badge > .remove-btn {
   color: #777;
+}
+
+.input {
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
