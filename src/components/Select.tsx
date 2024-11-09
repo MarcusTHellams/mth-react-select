@@ -28,9 +28,21 @@ export type SelectProps = {
 
 export const Select = (props: SelectProps) => {
   const { multiple, onChange, options, value } = props;
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, _setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [filterValue, setFilterValue] = useState('');
+
+  const setIsOpen = useCallback(
+    (updaterOrValue: React.SetStateAction<boolean>) => {
+      const newValue =
+        updaterOrValue instanceof Function
+          ? updaterOrValue(isOpen)
+          : updaterOrValue;
+      _setIsOpen(newValue);
+      if (!newValue) setHighlightedIndex(0);
+    },
+    [isOpen]
+  );
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -80,54 +92,47 @@ export const Select = (props: SelectProps) => {
     return multiple ? value.includes(option) : value === option;
   }
 
-  useEffect(() => {
-    if (!isOpen) {
-      setHighlightedIndex(0);
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    const input = inputRef.current;
-    const handler = (event: KeyboardEvent) => {
-      if (event.target !== input) {
-        return;
-      }
-      switch (event.code) {
-        // case 'Space':
-        case 'Enter':
-          setIsOpen((prev) => !prev);
-          if (isOpen) selectOption(filteredOptions[highlightedIndex]);
-          break;
-        case 'ArrowDown':
-        case 'ArrowUp': {
-          if (!isOpen) {
-            setIsOpen(true);
-            break;
-          }
-          let newValue =
-            highlightedIndex + (event.code === 'ArrowDown' ? 1 : -1);
-          if (newValue < 0) {
-            newValue = filteredOptions.length - 1;
-          }
-          if (newValue > filteredOptions.length - 1) {
-            newValue = 0;
-          }
-          setHighlightedIndex(newValue);
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    switch (event.code) {
+      // case 'Space':
+      case 'Enter':
+        setIsOpen((prev) => !prev);
+        if (isOpen) selectOption(filteredOptions[highlightedIndex]);
+        break;
+      case 'ArrowDown':
+      case 'ArrowUp': {
+        if (!isOpen) {
+          setIsOpen(true);
           break;
         }
-        case 'Escape':
-          setIsOpen(false);
-          break;
-        default:
-          return;
+        let newValue = highlightedIndex + (event.code === 'ArrowDown' ? 1 : -1);
+        if (newValue < 0) {
+          newValue = filteredOptions.length - 1;
+        }
+        if (newValue > filteredOptions.length - 1) {
+          newValue = 0;
+        }
+        setHighlightedIndex(newValue);
+        break;
       }
-    };
-    input?.addEventListener('keydown', handler);
+      case 'Backspace':
+      case 'Delete':
+        if (multiple && target.value === '') {
+          const optionToDelete = value.slice(-1);
+          if (optionToDelete[0]) {
+            selectOption(optionToDelete[0]);
+          }
+        }
+        break;
+      case 'Escape':
+        setIsOpen(false);
+        break;
+      default:
+        return;
+    }
+  };
 
-    return () => {
-      input?.removeEventListener('keydown', handler);
-    };
-  }, [isOpen, filteredOptions, highlightedIndex, selectOption]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -151,7 +156,7 @@ export const Select = (props: SelectProps) => {
       document.removeEventListener('click', clickOutSideHandler);
       document.removeEventListener('focusin', focusHandler);
     };
-  }, []);
+  }, [setIsOpen]);
 
   return (
     <>
@@ -186,6 +191,7 @@ export const Select = (props: SelectProps) => {
                 );
               })}
               <AutoSize
+                onKeyDown={keyDownHandler}
                 className={styles['input-container']}
                 value={filterValue}
                 onFocus={() => {
@@ -207,6 +213,7 @@ export const Select = (props: SelectProps) => {
           ) : (
             <>
               <AutoSize
+                onKeyDown={keyDownHandler}
                 className={styles['input-container']}
                 value={filterValue}
                 onFocus={() => {
